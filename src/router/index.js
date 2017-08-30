@@ -5,12 +5,18 @@ import Blog from '@/components/Blog'
 import About from '@/components/About'
 import Login from '@/components/Login'
 import Detail from '@/components/Detail'
+import AddBlog from '@/components/AddBlog'
 import Main from '@/components/Main'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login
+    },
     {
       path: '/',
       name: 'Main',
@@ -35,13 +41,13 @@ export default new Router({
           path: '/detail',
           name: 'Detail',
           component: Detail
+        },
+        {
+          path: '/addBlog',
+          name: 'AddBlog',
+          component: AddBlog
         }
       ]
-    },
-    {
-      path: '/login',
-      name: 'Login',
-      component: Login
     }
   ]
 })

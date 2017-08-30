@@ -3,21 +3,28 @@ var fs = require('fs')
 var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
+var webpack = require('webpack')
+var lang = require('highlight.js-async-webpack/src/file.lang.hljs.js')
 
-function resolve (dir) {
+function resolve(dir) {
   return path.join(__dirname, '..', dir)
+}
+var _entry= {
+  app: './src/main.js', // 原始入口
+  vue: ['vue']
+};
+for (var i = 0; i < lang.length; i++) {
+  _entry[lang[i]] = ['mavon-editor/dist/js/' + lang[i] + '.js']
 }
 
 module.exports = {
-  entry: {
-    app: './src/main.js'
-  },
+  entry: _entry,
   output: {
+    // filename: 'js/[name].js',
     path: config.build.assetsRoot,
     filename: '[name].js',
-    publicPath: process.env.NODE_ENV === 'production'
-      ? config.build.assetsPublicPath
-      : config.dev.assetsPublicPath
+    publicPath: process.env.NODE_ENV === 'production' ?
+      config.build.assetsPublicPath : config.dev.assetsPublicPath
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
@@ -73,5 +80,11 @@ module.exports = {
         }
       }
     ]
-  }
+  },
+  plugins: [
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery"
+    })
+  ]
 }
