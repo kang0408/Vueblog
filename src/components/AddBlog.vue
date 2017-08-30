@@ -1,18 +1,13 @@
 <template>
   <div class="allblog">
     <!-- 使用双向绑定修饰符 -->
-    <mavon-editor :ishljs="true" toolbars="toolbars" v-model="value"></mavon-editor>
+    <mavon-editor style="height: 500px" :ishljs="true" :toolbarsFlag="true" :toolbars="toolbars" v-model="value"></mavon-editor>
   </div>
 </template>
 
 <script>
-import { mavonEditor } from 'mavon-editor'
-import 'mavon-editor/dist/css/index.css'
 export default {
   name: 'hello',
-  components: {
-    mavonEditor
-  },
   data() {
     return {
       value: '',

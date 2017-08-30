@@ -17,7 +17,7 @@
         </el-col>
         <el-col :span="2">
           <div class="grid-content bg-purple">
-            <el-button v-show="user!==undefined" id="login" size="small" type="text" @click="addBlog">发博客</el-button>
+            <el-button v-show="user!=undefined" id="login" size="small" type="text" @click="addBlog">发博客</el-button>
           </div>
         </el-col>
       </el-row>
