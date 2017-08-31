@@ -1,6 +1,6 @@
 # blog
 
-> A Vue.js project
+> A Vue.js project.Use element ui component/mavon-editor/jquery/vue-router...
 
 ## Build Setup
 
