@@ -1,6 +1,6 @@
 <template>
   <div id="main">
-    <div>
+    <div class="topbar">
       <el-row>
         <el-col :span="22">
           <el-menu :default-active="index" class="el-menu-top" mode="horizontal">
@@ -17,7 +17,7 @@
         </el-col>
         <el-col :span="2">
           <div class="grid-content bg-purple">
-            <el-button v-show="user!=undefined" id="login" size="small" type="text" @click="addBlog">发博客</el-button>
+            <el-button v-show="user!=undefined" id="add" size="small" type="text" @click="addBlog">发博客</el-button>
           </div>
         </el-col>
       </el-row>
@@ -59,8 +59,11 @@ export default {
   padding: 20px 50px;
 }
 
-#login {
+#add {
   display: inline;
   line-height: 50px;
+}
+.topbar{
+  padding: 0px 50px;
 }
 </style>

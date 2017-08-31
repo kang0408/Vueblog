@@ -1,7 +1,10 @@
 <template>
   <div class="allblog">
-    <!-- 使用双向绑定修饰符 -->
-    <mavon-editor style="height: 500px" :ishljs="true" :toolbarsFlag="true" :toolbars="toolbars" v-model="value"></mavon-editor>
+    <div class="blogcontent">
+      <!-- 使用双向绑定修饰符 -->
+      <mavon-editor style="height: 100%" :subfield="true" :ishljs="true" :toolbarsFlag="true" :editable="true" :toolbars="toolbars" @save="$save" @imgAdd="$imgAdd" @imgDel="$imgDel" v-model="value"></mavon-editor>
+      <el-button type="primary" class="publish" size="large" v-on:click="publish">发布博客</el-button>
+    </div>
   </div>
 </template>
 
@@ -10,6 +13,7 @@ export default {
   name: 'hello',
   data() {
     return {
+      img_file: {},
       value: '',
       toolbars: {
         bold: true, // 粗体
@@ -30,21 +34,72 @@ export default {
         subfield: true, // 是否需要分栏
         fullscreen: true, // 全屏编辑
         readmodel: true, // 沉浸式阅读
-        htmlcode: true, // 展示html源码
+        htmlcode: false, // 展示html源码
         help: true, // 帮助
         /* 新增 */
         undo: true, // 上一步
         redo: true, // 下一步
         trash: true, // 清空
-        save: true // 保存（触发events中的save事件）
+        save: false // 保存（触发events中的save事件）
       }
     }
   },
-  mounted() {
-
-  },
   methods: {
+    $save: function() {
+      console.log(this.value);
+    },
+    $imgAdd: function(pos, $file) {
+      this.img_file[pos] = $file;
+    },
+    $imgDel: function(pos) {
+      delete this.img_file[pos];
+    },
+    uploadimg: function(resolve,reject) {
+      var self = this
+      // upload files in one request.
+      console.log(this.img_file);
+      var formdata = new FormData();
+      for (var _img in this.img_file) {
+        formdata.append(_img, this.img_file[_img]);
+      }
+      jQuery.ajax({
+        url: self.$commonConfig + "/net/image/upload",
+        type: 'POST',
+        data: formdata,
+        // 告诉jQuery不要去处理发送的数据
+        processData: false,
+        // 告诉jQuery不要去设置Content-Type请求头
+        contentType: false,
+        beforeSend: function() {
+          console.log("正在进行，请稍候")
+        },
+        success: function(responseStr) {
+          if (responseStr.status === 200) {
+            resolve(responseStr.data)
+          } else {
+            reject(responseStr.msg)
+          }
+        },
+        error: function(responseStr) {
+          reject('上传失败')
+        }
+      });
+    },
+    replaceValue:function(data){
+      for(var key in data){
+        this.value = this.value.replace(key,data[key])
+      }
+    },
+    publish: function() {
+      var self = this
+      new Promise(this.uploadimg).then((data)=>{
+          self.replaceValue(data)
+          console.log(self.value)
 
+      }).catch((error)=>{
+          console.log(error)
+      })
+    }
   }
 }
 </script>
@@ -68,5 +123,14 @@ li {
 
 a {
   color: #42b983;
+}
+
+.blogcontent {
+  height: 650px;
+  padding: 20px 50px;
+}
+
+.publish {
+  margin-top: 50px;
 }
 </style>
